@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "DS18B20.h"
 
-DigitalInOut sensorTemp(D3);     // sensor connected to pin 5
+DigitalInOut tempPin(D3);     // sensor connected to pin 5
 AnalogIn sensorLiquid(A0);
 
 PwmOut mypwm(PWM_OUT);
@@ -17,11 +17,12 @@ int main() {
     mypwm.period_ms(10);
     mypwm.pulsewidth_ms(1);
 
-    sensorTemp.mode(PullUp);
+    tempPin.mode(PullUp);
+    TemperatureSensor sensorTemp(tempPin);
 
     pc.printf("\n\rRunning temperature conversion...\n\r");
     while (1) {
-        uint32_t temperature = getTemperature();
+        uint32_t temperature = sensorTemp.getTemperature();
         pc.printf("Temperature: %d\r\n\r\n", temperature);
         wait(0.5);
         float val = sensorLiquid.read();
