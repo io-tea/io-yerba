@@ -76,10 +76,10 @@ ROM_Code_t ReadROM() {
 }
 
 // temperature is store as 7.4 fixed point format (assuming 12 bit conversion)
-void displayTemperature(Serial& s) {
+uint32_t getTemperature() {
     DoConversion();
     uint32_t temp = GetTemperature();
     float f = (temp & 0x0F) * 0.0625;    // calculate .4 part
     f += (temp >> 4);    // add 7.0 part to it
-    s.printf("Temp is %2.1fC\n\r", f);    // display in 2.1 format
+    return round(f);
 }

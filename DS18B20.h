@@ -14,9 +14,8 @@ typedef union {
     } BYTES;
 } ROM_Code_t;
 
-ROM_Code_t ReadROM() ;
+ROM_Code_t ReadROM();
 
-// temperature is store as 7.4 fixed point format (assuming 12 bit conversion)
-void displayTemperature(Serial& s) ;
+uint32_t getTemperature() ;
 
 #endif
