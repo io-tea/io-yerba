@@ -5,3 +5,6 @@ BUILD/
 Would skip repository mbed-os/
 mbed_settings.py
 mbed_settings.pyc
+.mbed
+.temp
+mbed-os
