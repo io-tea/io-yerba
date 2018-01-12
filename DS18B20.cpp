@@ -3,13 +3,16 @@
 #include "mbed.h"
 #include <stdint.h>
 
-void TemperatureSensor::doConversion_() {
-    WriteByte(pin_, SKIP_ROM);            // Skip ROM
-    WriteByte(pin_, CONVERT);             // Convert
-    while (ReadBit(pin_) == 0) {}
-}
+using namespace iotea::protocol;
+using namespace iotea::yerba;
 
-uint32_t TemperatureSensor::getTemperature_() {
+TemperatureSensor::TemperatureSensor(DigitalInOut pin) : pin_(pin) {}
+
+void TemperatureSensor::configure() {
+  pin_.mode(PullUp);
+};
+
+uint32_t TemperatureSensor::read_() {
     uint32_t result = 0;
 
     ScratchPad_t scratchpad;
@@ -23,7 +26,13 @@ uint32_t TemperatureSensor::getTemperature_() {
     return result;
 }
 
-ROM_Code_t TemperatureSensor::getRom() {
+void TemperatureSensor::doConversion_() {
+    WriteByte(pin_, SKIP_ROM);            // Skip ROM
+    WriteByte(pin_, CONVERT);             // Convert
+    while (ReadBit(pin_) == 0) {}
+}
+
+ROM_Code_t TemperatureSensor::getRom_() {
     ROM_Code_t ROM_Code;
     WriteByte(pin_, READ_ROM);    // Read ROM
     for (uint32_t i = 0; i < 8; ++i) {
@@ -33,10 +42,15 @@ ROM_Code_t TemperatureSensor::getRom() {
 }
 
 // temperature is store as 7.4 fixed point format (assuming 12 bit conversion)
-uint32_t TemperatureSensor::getTemperature() {
+uint32_t TemperatureSensor::getTemperature_() {
     doConversion_();
-    uint32_t temp = getTemperature_();
+    uint32_t temp = read_();
     float f = (temp & 0x0F) * 0.0625;    // calculate .4 part
     f += (temp >> 4);    // add 7.0 part to it
     return round(f);
+}
+
+std::list<protocol::Message> TemperatureSensor::getMessages() {
+  Message message(MessageType::TEMPERATURE, getTemperature_();
+  return std::list<Message>({message});
 }
