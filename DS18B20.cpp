@@ -13,6 +13,8 @@ void TemperatureSensor::configure() {
 uint32_t TemperatureSensor::read_() {
     uint32_t result = 0;
 
+    Reset(pin_);
+
     ScratchPad_t scratchpad;
     WriteByte(pin_, SKIP_ROM);    // Skip ROM
     WriteByte(pin_, READ_SCRATCHPAD);    // Read Scrachpad
@@ -25,6 +27,7 @@ uint32_t TemperatureSensor::read_() {
 }
 
 void TemperatureSensor::doConversion_() {
+    Reset(pin_);
     WriteByte(pin_, SKIP_ROM);            // Skip ROM
     WriteByte(pin_, CONVERT);             // Convert
     while (ReadBit(pin_) == 0) {}
@@ -32,6 +35,7 @@ void TemperatureSensor::doConversion_() {
 
 ROM_Code_t TemperatureSensor::getRom_() {
     ROM_Code_t ROM_Code;
+    Reset(pin_);
     WriteByte(pin_, READ_ROM);    // Read ROM
     for (uint32_t i = 0; i < 8; ++i) {
         ROM_Code.rom[i] = ReadByte(pin_);
