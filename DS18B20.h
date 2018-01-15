@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+
+#include "io-tea/sensor/sensor.h"
 #include "mbed.h"
 
 // Device byte commands over 1-wire serial
@@ -34,7 +36,7 @@ namespace iotea {
 
       class TemperatureSensor : public iotea::sensor::Sensor {
       public:
-        TemperatureSensor(DigitalInOut pin) : pin_(pin) {}
+        TemperatureSensor(DigitalInOut pin) noexcept;
         virtual void configure() override;
         virtual std::list<protocol::Message> getMessages() override;
 

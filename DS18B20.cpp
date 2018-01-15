@@ -1,7 +1,5 @@
 #include "DS18B20.h"
 #include "DS1Wire.h"
-#include "mbed.h"
-#include <stdint.h>
 
 using namespace iotea::protocol;
 using namespace iotea::yerba;
@@ -50,7 +48,7 @@ uint32_t TemperatureSensor::getTemperature_() {
     return round(f);
 }
 
-std::list<protocol::Message> TemperatureSensor::getMessages() {
-  Message message(MessageType::TEMPERATURE, getTemperature_();
+std::list<Message> TemperatureSensor::getMessages() {
+  Message message(MessageType::TEMPERATURE, getTemperature_());
   return std::list<Message>({message});
 }
