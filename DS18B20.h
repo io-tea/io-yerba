@@ -1,7 +1,8 @@
-#ifndef _DS18B20_
-#define _DS18B20_
+#pragma once
 
 #include <stdint.h>
+
+#include "io-tea/sensor/sensor.h"
 #include "mbed.h"
 
 // Device byte commands over 1-wire serial
@@ -30,17 +31,21 @@ typedef union {
     } BYTES;
 } ROM_Code_t;
 
-class TemperatureSensor {
-public:
-    TemperatureSensor(DigitalInOut pin) : pin_(pin) {}
+namespace iotea {
+    namespace yerba {
 
-    uint32_t getTemperature();
-    ROM_Code_t getRom();
+      class TemperatureSensor : public iotea::sensor::Sensor {
+      public:
+        TemperatureSensor(DigitalInOut pin) noexcept;
+        virtual void configure() override;
+        virtual std::list<protocol::Message> getMessages() override;
 
-private:
-    DigitalInOut pin_;
-    uint32_t getTemperature_();
-    void doConversion_();
-};
-
-#endif
+      private:
+          DigitalInOut pin_;
+          uint32_t getTemperature_();
+          uint32_t read_();
+          void doConversion_();
+          ROM_Code_t getRom_();
+      };
+  }
+}
