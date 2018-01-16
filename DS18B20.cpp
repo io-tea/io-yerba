@@ -1,7 +1,6 @@
 #include "DS18B20.h"
 #include "DS1Wire.h"
 
-using namespace iotea::protocol;
 using namespace iotea::yerba;
 
 TemperatureSensor::TemperatureSensor(DigitalInOut pin) : pin_(pin) {}
@@ -44,15 +43,10 @@ ROM_Code_t TemperatureSensor::getRom_() {
 }
 
 // temperature is store as 7.4 fixed point format (assuming 12 bit conversion)
-uint32_t TemperatureSensor::getTemperature_() {
+uint32_t TemperatureSensor::getTemperature() {
     doConversion_();
     uint32_t temp = read_();
     float f = (temp & 0x0F) * 0.0625;    // calculate .4 part
     f += (temp >> 4);    // add 7.0 part to it
     return round(f);
-}
-
-std::list<Message> TemperatureSensor::getMessages() {
-  Message message(MessageType::TEMPERATURE, getTemperature_());
-  return std::list<Message>({message});
 }

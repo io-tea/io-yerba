@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 
-#include "io-tea/sensor/sensor.h"
 #include "mbed.h"
 
 // Device byte commands over 1-wire serial
@@ -34,15 +33,14 @@ typedef union {
 namespace iotea {
     namespace yerba {
 
-      class TemperatureSensor : public iotea::sensor::Sensor {
+      class TemperatureSensor {
       public:
         TemperatureSensor(DigitalInOut pin) noexcept;
-        virtual void configure() override;
-        virtual std::list<protocol::Message> getMessages() override;
+        virtual void configure();
+        uint32_t getTemperature();
 
       private:
           DigitalInOut pin_;
-          uint32_t getTemperature_();
           uint32_t read_();
           void doConversion_();
           ROM_Code_t getRom_();
