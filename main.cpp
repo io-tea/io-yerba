@@ -13,7 +13,7 @@ int main() {
     setupTicker();
 
     time_t lastStatsTime = time(nullptr) - 1;
-    for (int tick = 0;; ++tick) {
+    while (true) {
         time_t now = time(nullptr);
         if (lastStatsTime != now) {
             lastStatsTime = now;
