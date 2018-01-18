@@ -14,6 +14,8 @@ int main() {
 
     time_t lastStatsTime = time(nullptr) - 1;
     while (true) {
+        sleep();
+
         time_t now = time(nullptr);
         if (lastStatsTime != now) {
             lastStatsTime = now;
